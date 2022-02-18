@@ -30,7 +30,8 @@ if __name__ == '__main__':
             "An implementation of the popular Wordle game for the Matrix Protocol.\n"
             "Commands:\n"
             "help, h - Display help message\n"
-            "start, s - Start a new Wordle")
+            "start, s - Start a new Wordle\n"
+            "answer, a - Reveal the answer")
         await bot.api.send_markdown_message(room.room_id, response)
     
     @bot.listener.on_message_event
@@ -94,6 +95,14 @@ if __name__ == '__main__':
         state[user] = state[user] + 1
         s.save_state(state)
         response = f"{response}\n{6-state[user]} guesses remaining."
-        await bot.api.send_text_message(room.room_id, response)    
+        await bot.api.send_text_message(room.room_id, response)
+
+    @bot.listener.on_message_event
+    async def reveal_answer(room, message):
+        match = botlib.MessageMatch(room, message, bot, prefix)
+        if not (match.prefix() and (match.command("answer") or match.command("a"))):
+            return
+        response = f"The answer is {w.get_daily()}."
+        await bot.api.send_text_message(room.room_id, response)
 
     bot.run()
