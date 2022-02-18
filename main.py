@@ -42,9 +42,10 @@ if __name__ == '__main__':
         
         user = message.sender
         state[user] = 0
-        response = ("Starting new Wordle game!\n\n"\
-                    "Guess a 5 letter word:\n\n"
-                    "```- - - - -```"
+        response = ("Starting new Wordle game!\n"\
+                    f"Guess a 5 letter word with \"{prefix}guess\"\n"\
+                    "6 guesses remaining."
+
         )
         await bot.api.send_markdown_message(room.room_id, response)
         s.save_state(state)
@@ -84,7 +85,7 @@ if __name__ == '__main__':
             return
         
         if result == list(w.GREEN*5):
-            response = f"{response}\nThe answer was {w.get_daily()}. You Won in {state[user]+1} tries!"
+            response = f"{response}\nThe answer was {w.get_daily()}. You Won in {state[user]+1} guesses!"
             await bot.api.send_text_message(room.room_id, response)
             state.pop(user)
             s.save_state(state)
@@ -92,6 +93,7 @@ if __name__ == '__main__':
 
         state[user] = state[user] + 1
         s.save_state(state)
+        response = f"{response}\n{6-state[user]} guesses remaining."
         await bot.api.send_text_message(room.room_id, response)    
 
     bot.run()
