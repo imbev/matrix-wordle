@@ -35,3 +35,6 @@ Run main.py
 ```bash
 python -m poetry run python main.py
 ```
+
+## Example:
+![](./example.png)
