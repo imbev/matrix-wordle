@@ -33,5 +33,5 @@ PASSWORD=password # or ACCESS_TOKEN=syt_...
 
 Run main.py
 ```bash
-python -m poetry run main.py
+python -m poetry run python main.py
 ```
