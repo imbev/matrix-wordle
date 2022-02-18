@@ -2,6 +2,8 @@
 
 An implementation of the popular Wordle game for the Matrix Protocol.
 
+Made with [![](https://img.shields.io/badge/simplematrixbotlib-2.6.1-brightgreen)](https://github.com/i10b/simplematrixbotlib)
+
 ## Setup
 Install Python 3.8 or higher
 
