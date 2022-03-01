@@ -8,7 +8,7 @@ BLACK = '⬛'
 
 def get_daily():
     now = datetime.datetime.now()
-    month, day, year = now.strftime("%b"), str(now.day), str(now.year)
+    month, day, year = now.strftime("%b"), str(now.day).zfill(2), str(now.year)
 
     with open(os.path.join('resources', 'wordle_key.csv'), newline='') as f:
         reader = csv.reader(f, delimiter=',')
