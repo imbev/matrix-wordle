@@ -8,12 +8,12 @@ def load_state():
     if not os.path.isfile('state.json'):
         save_state({})
 
-    with open('state.json', 'r', encoding='ascii') as fhandle:
+    with open('state.json', 'r', encoding='utf_8') as fhandle:
         return json.load(fhandle)
 
 def save_state(state: str):
     """Save the state to a file"""
-    with open('state.json', 'w', encoding='ascii') as fhandle:
+    with open('state.json', 'w', encoding='utf_8') as fhandle:
         json.dump(state, fhandle)
 
 def ensure_state(func):

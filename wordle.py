@@ -17,7 +17,7 @@ class Wordle:
 
         # Read the words into the database
         with open(os.path.join('resources', 'wordle_key.csv'),
-            newline='', encoding='ascii'
+            newline='', encoding='utf_8'
         ) as fhandle:
             reader = csv.reader(fhandle, delimiter=',')
             for row in reader:
@@ -69,7 +69,7 @@ class Wordle:
     def get_todays_word(self, month: str, day: str, year: str):
         """Retrieve the day's word from the CSV"""
         with open(os.path.join('resources', 'wordle_key.csv'),
-            newline='', encoding='ascii'
+            newline='', encoding='utf_8'
         ) as fhandle:
             reader = csv.reader(fhandle, delimiter=',')
             for row in reader:
