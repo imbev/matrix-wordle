@@ -112,7 +112,7 @@ if __name__ == '__main__':
         # Answer guessed correctly
         if result['space'] == list(wordle.GREEN*5):
             response = (f"{response}\n"
-                f"The answer was {wordle.get_daily()}."
+                f"The answer was {wordle.get_daily()}. "
                 f"You Won in {state[user]['guesses']+1} guesses!"
             )
             await bot.api.send_text_message(room.room_id, response)
