@@ -24,28 +24,6 @@ class Wordle:
                 self.word_db.append(row[5])
         self.get_daily()
 
-    def get_todays_word(self, month: str, day: str, year: str):
-        """Retrieve the day's word from the CSV"""
-        with open(os.path.join('resources', 'wordle_key.csv'),
-            newline='', encoding='ascii'
-        ) as fhandle:
-            reader = csv.reader(fhandle, delimiter=',')
-            for row in reader:
-                if (row[0], row[1], row[2]) == (month, day, year):
-                    self.word_of_the_day = row[5]
-                    break
-
-    def get_daily(self) -> str:
-        """Check the last retrieval date and get today's word if needed."""
-        now = datetime.datetime.now()
-        month, day, year = now.strftime("%b"), str(now.day).zfill(2), str(now.year)
-
-        if self.word_day == 0 or self.word_day != day:
-            self.word_day = day
-            self.get_todays_word(month, day, year)
-
-        return self.word_of_the_day
-
     def check_guess(self, guess: str) -> list:
         """Check how correct the user guess is
 
@@ -76,6 +54,28 @@ class Wordle:
                     results['invalid'].append(guess[i])
 
         return results
+
+    def get_daily(self) -> str:
+        """Check the last retrieval date and get today's word if needed."""
+        now = datetime.datetime.now()
+        month, day, year = now.strftime("%b"), str(now.day).zfill(2), str(now.year)
+
+        if self.word_day == 0 or self.word_day != day:
+            self.word_day = day
+            self.get_todays_word(month, day, year)
+
+        return self.word_of_the_day
+
+    def get_todays_word(self, month: str, day: str, year: str):
+        """Retrieve the day's word from the CSV"""
+        with open(os.path.join('resources', 'wordle_key.csv'),
+            newline='', encoding='ascii'
+        ) as fhandle:
+            reader = csv.reader(fhandle, delimiter=',')
+            for row in reader:
+                if (row[0], row[1], row[2]) == (month, day, year):
+                    self.word_of_the_day = row[5]
+                    break
 
     def known(self, guess: str) -> bool:
         """Check if the guessed word is known by the bot"""
