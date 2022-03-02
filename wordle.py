@@ -28,7 +28,7 @@ class Wordle:
         """Check how correct the user guess is
 
         results = {
-            "space": "[green][black][black][yellow][black]",
+            "space": [[green], [black], [black], [yellow], [black]],
             "valid": ['c', 'h'],
             "invalid": ['a', 's']
         }
