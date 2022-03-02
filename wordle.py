@@ -1,3 +1,4 @@
+"""Wordle game logic"""
 import csv
 import datetime
 import os
@@ -15,16 +16,20 @@ class Wordle:
         self.word_of_the_day = ""
 
         # Read the words into the database
-        with open(os.path.join('resources', 'wordle_key.csv'), newline='') as f:
-            reader = csv.reader(f, delimiter=',')
+        with open(os.path.join('resources', 'wordle_key.csv'),
+            newline='', encoding='ascii'
+        ) as fhandle:
+            reader = csv.reader(fhandle, delimiter=',')
             for row in reader:
                 self.word_db.append(row[5])
         self.get_daily()
 
     def get_todays_word(self, month: str, day: str, year: str):
         """Retrieve the day's word from the CSV"""
-        with open(os.path.join('resources', 'wordle_key.csv'), newline='') as f:
-            reader = csv.reader(f, delimiter=',')
+        with open(os.path.join('resources', 'wordle_key.csv'),
+            newline='', encoding='ascii'
+        ) as fhandle:
+            reader = csv.reader(fhandle, delimiter=',')
             for row in reader:
                 if (row[0], row[1], row[2]) == (month, day, year):
                     self.word_of_the_day = row[5]

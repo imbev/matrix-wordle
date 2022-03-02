@@ -1,9 +1,11 @@
+"""Matrix Bot to play some Wordle in chat"""
 import os
+import string
+
 import simplematrixbotlib as botlib
 import wordle as w
 import state as s
 
-import string
 
 if __name__ == '__main__':
     creds = botlib.Creds(
@@ -12,7 +14,7 @@ if __name__ == '__main__':
         password=os.environ.get('PASSWORD'),
         access_token=os.environ.get('ACCESS_TOKEN')
         )
-    
+
     bot = botlib.Bot(creds)
     prefix = os.environ.get('PREFIX', 'w!')
     wordle = w.Wordle()
@@ -32,7 +34,7 @@ if __name__ == '__main__':
         match = bot_msg_match(room, message)
         if not valid_command("help", match):
             return
-        
+
         response = ("## matrix-wordle\n"
             "An implementation of the popular Wordle game for the Matrix Protocol.\n"
             "Commands:\n"
@@ -40,7 +42,7 @@ if __name__ == '__main__':
             "start, s - Start a new Wordle\n"
             "answer, a - Reveal the answer")
         await bot.api.send_markdown_message(room.room_id, response)
-    
+
     @bot.listener.on_message_event
     @s.ensure_state
     async def start_game(room, message, state):
@@ -48,9 +50,13 @@ if __name__ == '__main__':
         match = bot_msg_match(room, message)
         if not valid_command("start", match):
             return
-        
+
         user = message.sender
-        state[user] = {"guesses": 0, "guessed_letters": [], "letters_remaining": list(string.ascii_uppercase)}
+        state[user] = {
+            "guesses": 0,
+            "guessed_letters": [],
+            "letters_remaining": list(string.ascii_uppercase)
+        }
         response = ("Starting new Wordle game!\n"\
                     f"Guess a 5 letter word with \"{prefix}guess\"\n"\
                     "6 guesses remaining."
@@ -70,20 +76,24 @@ if __name__ == '__main__':
         user = message.sender
 
         # Game not started yet
-        if not (user in state.keys()):
+        if user not in state.keys():
             response = f"Please start a new Wordle game with \"{prefix}start\" before guessing!"
             await bot.api.send_text_message(room.room_id, response)
             return
 
         # Invalid guess
         if len(match.args()) != 1 or len(match.args()[0]) != 5:
-            response = f"Invalid guess, please provide a valid 5 letter word with \"{prefix}guess <word>\"."
+            response = ("Invalid guess, please provide a valid 5 letter word: "
+                f"\"{prefix}guess <word>\"."
+            )
             await bot.api.send_text_message(room.room_id, response)
             return
 
         # Build bot's response
         result = wordle.check_guess(match.args()[0])
-        response = f"{'   '.join(x for x in match.args()[0])}\n{''.join(x for x in result['space'])}"
+        response = (f"{'   '.join(x for x in match.args()[0])}\n"
+            f"{''.join(x for x in result['space'])}"
+        )
 
         # Unknown word
         if not wordle.known(match.args()[0]):
@@ -101,7 +111,10 @@ if __name__ == '__main__':
 
         # Answer guessed correctly
         if result['space'] == list(wordle.GREEN*5):
-            response = f"{response}\nThe answer was {wordle.get_daily()}. You Won in {state[user]['guesses']+1} guesses!"
+            response = (f"{response}\n"
+                f"The answer was {wordle.get_daily()}."
+                f"You Won in {state[user]['guesses']+1} guesses!"
+            )
             await bot.api.send_text_message(room.room_id, response)
             state.pop(user)
             s.save_state(state)
