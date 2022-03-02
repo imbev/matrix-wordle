@@ -1,7 +1,11 @@
 import json
+import os
 
 
 def load_state():
+    if not os.path.isfile('state.json'):
+        save_state({})
+
     with open('state.json', 'r') as f:
         return json.load(f)
 
