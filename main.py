@@ -62,6 +62,7 @@ if __name__ == '__main__':
                     "6 guesses remaining."
 
         )
+        wordle.get_daily()
         await bot.api.send_markdown_message(room.room_id, response)
         s.save_state(state)
 
